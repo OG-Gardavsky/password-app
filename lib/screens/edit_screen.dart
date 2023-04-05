@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
+import '../main.dart';
 import '../models/password_record.dart';
 import 'package:uuid/uuid.dart';
 
@@ -18,7 +20,7 @@ class _EditScreenState extends State<EditScreen> {
   String _userName = '';
   String _password = '';
 
-  void _submitForm() async {
+  void _submitForm(MyAppState appState) async {
     if (_formKey.currentState!.validate()) {
       final record = PasswordRecord(
         id: const Uuid().v4().toString(),
@@ -30,6 +32,8 @@ class _EditScreenState extends State<EditScreen> {
         key: record.id,
         value: jsonEncode(record),
       );
+      appState.addPassRecord(record);
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Record saved')),
       );
@@ -39,6 +43,8 @@ class _EditScreenState extends State<EditScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+
     return Scaffold(
       appBar: AppBar(title: Text('Add Password Record')),
       body: Padding(
@@ -79,7 +85,9 @@ class _EditScreenState extends State<EditScreen> {
                 onChanged: (value) => _password = value,
               ),
               ElevatedButton(
-                onPressed: _submitForm,
+                onPressed: () {
+                  _submitForm(appState);
+                },
                 child: Text('Save Record'),
               ),
             ],

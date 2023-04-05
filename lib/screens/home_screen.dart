@@ -1,59 +1,37 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:password_manger/screens/edit_screen.dart';
+import 'package:password_manger/screens/view_screen.dart';
+import 'package:provider/provider.dart';
 
-import '../models/password_record.dart';
+import '../main.dart';
 
-final storage = FlutterSecureStorage();
-
-class HomeScreen extends StatefulWidget {
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  // const HomeScreen({super.key});
-
-  List<PasswordRecord> _passwordRecords = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _readData();
-  }
-
-  Future<void> _readData() async {
-    List<PasswordRecord> records = [];
-    Map<String, dynamic> allValues = await storage.readAll();
-
-    for (String key in allValues.keys) {
-      Map<String, dynamic> json = jsonDecode(allValues[key]!);
-      PasswordRecord record = PasswordRecord.fromJson(json);
-      records.add(record);
-    };
-    setState(() {
-      _passwordRecords = records;
-    });
-  }
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+    var passwordRecords = appState.passwordRecords;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Passwords '),
       ),
       body: Center(
         child: ListView.builder(
-          itemCount: _passwordRecords.length,
+          itemCount: passwordRecords.length,
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
-              title: Text(_passwordRecords[index].name),
-              subtitle: Text('Username: ${_passwordRecords[index].userName}'),
+              title: Text(passwordRecords[index].name),
+              subtitle: Text(passwordRecords[index].userName),
               trailing: Icon(Icons.lock),
               onTap: () {
-                // Handle onTap event
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ViewScreen(),
+                  ),
+                );
               },
             );
           },
