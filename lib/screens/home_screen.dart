@@ -46,7 +46,7 @@ class HomeScreen extends StatelessWidget {
             ),
           );
         },
-        tooltip: 'Increment',
+        tooltip: 'Add record',
         child: const Icon(Icons.add),
       ),
     );

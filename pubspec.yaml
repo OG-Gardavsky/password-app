@@ -9,10 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   cupertino_icons: ^1.0.2
-
   flutter_secure_storage: ^5.0.0
+  uuid: ^3.0.4
 
 dev_dependencies:
   flutter_test:

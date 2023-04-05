@@ -1,31 +1,9 @@
-// import 'package:flutter/material.dart';
-//
-// class EditScreen extends StatelessWidget {
-//   // const HomeScreen({super.key});
-//
-//
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Edit screen'),
-//       ),
-//       body: const Center(
-//         child: Text(
-//           'Hello World',
-//           style: TextStyle(fontSize: 24.0),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../models/password_record.dart';
+import 'package:uuid/uuid.dart';
 
 class EditScreen extends StatefulWidget {
   @override
@@ -43,14 +21,14 @@ class _EditScreenState extends State<EditScreen> {
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       final record = PasswordRecord(
-        id: DateTime.now().toString(),
+        id: const Uuid().v4().toString(),
         name: _name,
         userName: _userName,
         password: _password,
       );
       await _storage.write(
         key: record.id,
-        value: record.toJson().toString(),
+        value: jsonEncode(record),
       );
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Record saved')),
