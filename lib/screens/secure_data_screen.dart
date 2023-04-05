@@ -35,18 +35,6 @@ class _SecureDataScreenState extends State<SecureDataScreen> {
     });
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       title: Text('Secure Data'),
-  //     ),
-  //     body: Center(
-  //       child: Text('data'),
-  //     ),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,22 +58,4 @@ class _SecureDataScreenState extends State<SecureDataScreen> {
       ),
     );
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return ListView.builder(
-  //     itemCount: _passwordRecords.length,
-  //     itemBuilder: (BuildContext context, int index) {
-  //       return ListTile(
-  //         title: Text(_passwordRecords[index].name),
-  //         subtitle: Text('Username: ${_passwordRecords[index].userName}'),
-  //         trailing: Icon(Icons.lock),
-  //         onTap: () {
-  //           // Handle onTap event
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
-
 }
