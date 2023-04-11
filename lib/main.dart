@@ -69,7 +69,16 @@ class MyAppState extends ChangeNotifier {
   }
 
   bool isRecordValid(PasswordRecord record) {
-      return passwordRecords.contains(record);
+    for (var element in passwordRecords) {
+      if(element.id == record.id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  PasswordRecord? findRecordById(String id) {
+    return passwordRecords.firstWhere((element) => element.id == id);
   }
 
   Future<void> deleteRecordById(String id) async {
@@ -78,8 +87,6 @@ class MyAppState extends ChangeNotifier {
     passwordRecords.removeWhere((element) => element.id == id);
 
     notifyListeners();
-
-    // await loadPassRecordsFromDb();
   }
 
 }

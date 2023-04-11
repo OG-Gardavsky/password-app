@@ -41,13 +41,14 @@ class _EditScreenState extends State<EditScreen> {
   }
 
   void _deleteRecord() async {
-
     await appState.deleteRecordById(_id!);
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Record deleted!')),
     );
 
+    Navigator.of(context).pop();
+    Navigator.of(context).pop();
     Navigator.of(context).pop();
   }
 
@@ -102,18 +103,50 @@ class _EditScreenState extends State<EditScreen> {
                 onChanged: (value) => _password = value,
                 initialValue: widget.passwordRecord?.password ?? '',
               ),
+              Visibility(
+                  visible: _id != null,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text("Delete Password?"),
+                            content: Text('Are you sure you want to delete password record "$_name"?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text("Close"),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  _deleteRecord();
+                                },
+                                style: ButtonStyle(
+                                  foregroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                                ),
+                                child: const Text("Delete"),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                    ),
+                    child: const Text('Delete'),
+                  )
+              ),
               ElevatedButton(
                 onPressed: () {
                   _submitForm();
 
                 },
                 child: const Text('Save Record'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  _deleteRecord();
-                },
-                child: const Text('Delete'),
               ),
             ],
           ),

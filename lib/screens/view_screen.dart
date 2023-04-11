@@ -34,12 +34,14 @@ class _ViewScreenState extends State<ViewScreen> {
       );
     }
 
+    passwordRecord = appState.findRecordById(passwordRecord!.id);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(passwordRecord!.name),
       ),
       body: Padding(
-        padding: EdgeInsets.all(0),
+        padding: const EdgeInsets.all(0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -85,24 +87,25 @@ class _ViewScreenState extends State<ViewScreen> {
                   ? Text(passwordRecord!.password)
                   : Text("********"),
             ),
-            ElevatedButton(
-              // style: ButtonStyle,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditScreen(passwordRecord: passwordRecord),
-                  ),
-                );
-              },
-              child: Row(
-                children: const [
-                  Icon(Icons.edit),
-                  Text('edit')
-                ],
-              )
-             
-            ),
+            Padding(
+                padding: const EdgeInsets.all(16),
+              child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditScreen(passwordRecord: passwordRecord),
+                      ),
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Text('Edit')
+                    ],
+                  )
+              ),
+            )
           ],
         ),
       ),
