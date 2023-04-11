@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:password_manger/screens/edit_screen.dart';
 import 'package:password_manger/screens/home_screen.dart';
-import 'package:password_manger/screens/secure_data_screen.dart';
 import 'package:password_manger/screens/view_screen.dart';
 
 class Routes {
@@ -15,6 +14,5 @@ class Routes {
     home: (BuildContext context) => const HomeScreen(),
     edit: (BuildContext context) => const EditScreen(),
     view: (BuildContext context) => const ViewScreen(),
-    secure: (BuildContext context) => SecureDataScreen(),
   };
 }
