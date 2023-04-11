@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:password_manger/screens/edit_screen.dart';
-
+import 'package:provider/provider.dart';
+import '../main.dart';
 import '../models/password_record.dart';
 
 class ViewScreen extends StatefulWidget {
-  final PasswordRecord? passwordRecord;
+  final String? passwordRecordId;
 
-  const ViewScreen({super.key, this.passwordRecord});
+  const ViewScreen({super.key, this.passwordRecordId});
 
   @override
   _ViewScreenState createState() => _ViewScreenState();
@@ -15,10 +16,14 @@ class ViewScreen extends StatefulWidget {
 
 class _ViewScreenState extends State<ViewScreen> {
   bool _showPassword = false;
+  PasswordRecord? passwordRecord;
 
   @override
   Widget build(BuildContext context) {
-    if (widget.passwordRecord == null) {
+    var appState = context.watch<MyAppState>();
+    passwordRecord = widget.passwordRecordId != null ? appState.findRecordById(widget.passwordRecordId!) : null;
+
+    if (passwordRecord == null) {
       return Scaffold(
         appBar: AppBar(
           title: Text("View Password Record"),
@@ -31,7 +36,7 @@ class _ViewScreenState extends State<ViewScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.passwordRecord!.name),
+        title: Text(passwordRecord!.name),
       ),
       body: Padding(
         padding: EdgeInsets.all(0),
@@ -40,15 +45,15 @@ class _ViewScreenState extends State<ViewScreen> {
           children: [
             ListTile(
               subtitle: Text("Website Name"),
-              title: Text(widget.passwordRecord!.name),
+              title: Text(passwordRecord!.name),
             ),
             ListTile(
               subtitle: Text("Username"),
-              title: Text(widget.passwordRecord!.userName),
+              title: Text(passwordRecord!.userName),
               trailing: IconButton(
                 icon: Icon(Icons.copy ),
                 onPressed: () async {
-                  await Clipboard.setData(ClipboardData(text: widget.passwordRecord!.userName));
+                  await Clipboard.setData(ClipboardData(text: passwordRecord!.userName));
                 },
               ),
             ),
@@ -71,13 +76,13 @@ class _ViewScreenState extends State<ViewScreen> {
                   IconButton(
                     icon: Icon(Icons.copy ),
                     onPressed: () async {
-                      await Clipboard.setData(ClipboardData(text: widget.passwordRecord!.password));
+                      await Clipboard.setData(ClipboardData(text: passwordRecord!.password));
                     },
                   ),
                 ],
               ),
               title: _showPassword
-                  ? Text(widget.passwordRecord!.password)
+                  ? Text(passwordRecord!.password)
                   : Text("********"),
             ),
             ElevatedButton(
@@ -86,7 +91,7 @@ class _ViewScreenState extends State<ViewScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => EditScreen(passwordRecord: widget.passwordRecord),
+                    builder: (context) => EditScreen(passwordRecord: passwordRecord),
                   ),
                 );
               },

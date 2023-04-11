@@ -67,4 +67,9 @@ class MyAppState extends ChangeNotifier {
     passwordRecords.add(record);
     notifyListeners();
   }
+
+  PasswordRecord? findRecordById(String id) {
+    return passwordRecords.firstWhere((element) => element.id == id);
+  }
+
 }

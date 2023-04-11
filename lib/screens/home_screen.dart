@@ -29,7 +29,7 @@ class HomeScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ViewScreen( passwordRecord: passwordRecords[index]),
+                    builder: (context) => ViewScreen( passwordRecordId: passwordRecords[index].id),
                   ),
                 );
               },
