@@ -1,38 +1,36 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import '../main.dart';
 import '../models/password_record.dart';
 import 'package:uuid/uuid.dart';
 
 class EditScreen extends StatefulWidget {
+  final PasswordRecord? passwordRecord;
+
+  const EditScreen({super.key, this.passwordRecord});
+
+
   @override
   _EditScreenState createState() => _EditScreenState();
 }
 
 class _EditScreenState extends State<EditScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _storage = const FlutterSecureStorage();
 
   String _name = '';
   String _userName = '';
   String _password = '';
+  String? _id = '';
 
   void _submitForm(MyAppState appState) async {
+
     if (_formKey.currentState!.validate()) {
-      final record = PasswordRecord(
-        id: const Uuid().v4().toString(),
+      await appState.saveOrUpdatePassRecord(PasswordRecord(
+        id: _id ?? const Uuid().v4().toString(),
         name: _name,
         userName: _userName,
         password: _password,
-      );
-      await _storage.write(
-        key: record.id,
-        value: jsonEncode(record),
-      );
-      appState.addPassRecord(record);
+      ));
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Record saved')),
@@ -45,17 +43,22 @@ class _EditScreenState extends State<EditScreen> {
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
 
+    _name = widget.passwordRecord?.name ?? '';
+    _userName = widget.passwordRecord?.userName ?? '';
+    _password = widget.passwordRecord?.password ?? '';
+    _id = widget.passwordRecord?.id;
+
     return Scaffold(
-      appBar: AppBar(title: Text('Add Password Record')),
+      appBar: AppBar(title: Text(widget.passwordRecord?.name != null ? 'Edit ${widget.passwordRecord?.name}' : 'Add Password Record')),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TextFormField(
-                decoration: InputDecoration(labelText: 'Name/URL'),
+                decoration: const InputDecoration(labelText: 'Name/URL'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a name or URL of website';
@@ -63,9 +66,10 @@ class _EditScreenState extends State<EditScreen> {
                   return null;
                 },
                 onChanged: (value) => _name = value,
+                initialValue: widget.passwordRecord?.name ?? '',
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Username'),
+                decoration: const InputDecoration(labelText: 'Username'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a username';
@@ -73,9 +77,10 @@ class _EditScreenState extends State<EditScreen> {
                   return null;
                 },
                 onChanged: (value) => _userName = value,
+                initialValue: widget.passwordRecord?.userName ?? '',
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Password'),
+                decoration: const InputDecoration(labelText: 'Password'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a password';
@@ -83,12 +88,20 @@ class _EditScreenState extends State<EditScreen> {
                   return null;
                 },
                 onChanged: (value) => _password = value,
+                initialValue: widget.passwordRecord?.password ?? '',
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  _submitForm(appState);
+
+                },
+                child: const Text('Save Record'),
               ),
               ElevatedButton(
                 onPressed: () {
                   _submitForm(appState);
                 },
-                child: Text('Save Record'),
+                child: const Text('Delete'),
               ),
             ],
           ),

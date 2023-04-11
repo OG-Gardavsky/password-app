@@ -31,6 +31,7 @@ class MyApp extends StatelessWidget {
 
 class MyAppState extends ChangeNotifier {
   List<PasswordRecord> passwordRecords = [];
+  final _storage = const FlutterSecureStorage();
 
   MyAppState() {
     loadPassRecordsFromDb();
@@ -49,7 +50,20 @@ class MyAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addPassRecord(PasswordRecord record) {
+  Future<void> saveOrUpdatePassRecord(PasswordRecord record) async {
+    await _storage.write(
+      key: record.id,
+      value: jsonEncode(record),
+    );
+
+    for (var i = 0; i < passwordRecords.length; i++) {
+      if(passwordRecords[i].id == record.id) {
+        passwordRecords[i] = record;
+        notifyListeners();
+        return;
+      }
+    }
+
     passwordRecords.add(record);
     notifyListeners();
   }

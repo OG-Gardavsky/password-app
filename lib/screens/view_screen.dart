@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:password_manger/screens/edit_screen.dart';
 
 import '../models/password_record.dart';
 
 class ViewScreen extends StatefulWidget {
   final PasswordRecord? passwordRecord;
 
-  ViewScreen({this.passwordRecord});
+  const ViewScreen({super.key, this.passwordRecord});
 
   @override
   _ViewScreenState createState() => _ViewScreenState();
@@ -78,6 +79,24 @@ class _ViewScreenState extends State<ViewScreen> {
               title: _showPassword
                   ? Text(widget.passwordRecord!.password)
                   : Text("********"),
+            ),
+            ElevatedButton(
+              // style: ButtonStyle,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditScreen(passwordRecord: widget.passwordRecord),
+                  ),
+                );
+              },
+              child: Row(
+                children: const [
+                  Icon(Icons.edit),
+                  Text('edit')
+                ],
+              )
+             
             ),
           ],
         ),
