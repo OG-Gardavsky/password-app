@@ -7,8 +7,6 @@ import 'package:provider/provider.dart';
 
 import 'models/password_record.dart';
 
-const storage = FlutterSecureStorage();
-
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
@@ -39,7 +37,7 @@ class MyAppState extends ChangeNotifier {
 
   Future<void> loadPassRecordsFromDb() async {
     List<PasswordRecord> records = [];
-    Map<String, dynamic> allValues = await storage.readAll();
+    Map<String, dynamic> allValues = await _storage.readAll();
 
     for (String key in allValues.keys) {
       Map<String, dynamic> json = jsonDecode(allValues[key]!);
@@ -82,7 +80,7 @@ class MyAppState extends ChangeNotifier {
   }
 
   Future<void> deleteRecordById(String id) async {
-    await storage.delete(key: id);
+    await _storage.delete(key: id);
 
     passwordRecords.removeWhere((element) => element.id == id);
 
