@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:password_manger/routes.dart';
 import 'package:provider/provider.dart';
 import '../main.dart';
 import '../models/password_record.dart';
@@ -45,7 +46,7 @@ class _EditScreenState extends State<EditScreen> {
       const SnackBar(content: Text('Record deleted!')),
     );
 
-    Navigator.of(context).popUntil(ModalRoute.withName('/'));
+    Navigator.of(context).popUntil(ModalRoute.withName(Routes.home));
   }
 
   String? validatorFn(String msg, String? value) {
