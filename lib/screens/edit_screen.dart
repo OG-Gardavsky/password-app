@@ -9,7 +9,6 @@ class EditScreen extends StatefulWidget {
 
   const EditScreen({super.key, this.passwordRecord});
 
-
   @override
   _EditScreenState createState() => _EditScreenState();
 }
@@ -24,7 +23,6 @@ class _EditScreenState extends State<EditScreen> {
   String? _id = '';
 
   void _submitForm() async {
-
     if (_formKey.currentState!.validate()) {
       await appState.saveOrUpdatePassRecord(PasswordRecord(
         id: _id ?? const Uuid().v4().toString(),
@@ -50,9 +48,16 @@ class _EditScreenState extends State<EditScreen> {
     Navigator.of(context).popUntil(ModalRoute.withName('/'));
   }
 
+  String? validatorFn(String msg, String? value) {
+    if (value == null || value.isEmpty) {
+      return msg;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
-     appState = context.watch<MyAppState>();
+    appState = context.watch<MyAppState>();
 
     _name = widget.passwordRecord?.name ?? '';
     _userName = widget.passwordRecord?.userName ?? '';
@@ -60,7 +65,10 @@ class _EditScreenState extends State<EditScreen> {
     _id = widget.passwordRecord?.id;
 
     return Scaffold(
-      appBar: AppBar(title: Text(widget.passwordRecord?.name != null ? 'Edit ${widget.passwordRecord?.name}' : 'Add Password Record')),
+      appBar: AppBar(
+          title: Text(widget.passwordRecord?.name != null
+              ? 'Edit ${widget.passwordRecord?.name}'
+              : 'Add Password Record')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -69,87 +77,101 @@ class _EditScreenState extends State<EditScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Name/URL'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a name or URL of website';
-                  }
-                  return null;
-                },
+                decoration: const InputDecoration(labelText: 'Website Name'),
+                validator: (value) =>
+                    validatorFn('Please enter a Website Name', value),
                 onChanged: (value) => _name = value,
                 initialValue: widget.passwordRecord?.name ?? '',
               ),
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Username'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a username';
-                  }
-                  return null;
-                },
+                validator: (value) =>
+                    validatorFn('Please enter a username', value),
                 onChanged: (value) => _userName = value,
                 initialValue: widget.passwordRecord?.userName ?? '',
               ),
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Password'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a password';
-                  }
-                  return null;
-                },
+                validator: (value) =>
+                    validatorFn('Please enter a password', value),
                 onChanged: (value) => _password = value,
                 initialValue: widget.passwordRecord?.password ?? '',
               ),
-              Visibility(
-                  visible: _id != null,
-                  child: ElevatedButton(
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _id != null
+                      ? Expanded(
+                          child: DeleteBtn(
+                              'Are you sure you want to delete password record "$_name"?',
+                              _deleteRecord),
+                        )
+                      : const SizedBox.shrink(),
+                  _id != null
+                      ? const SizedBox(
+                          width: 16,
+                        )
+                      : const SizedBox.shrink(),
+                  Expanded(
+                      child: ElevatedButton(
                     onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text("Delete Password?"),
-                            content: Text('Are you sure you want to delete password record "$_name"?'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text("Close"),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  _deleteRecord();
-                                },
-                                style: ButtonStyle(
-                                  foregroundColor: MaterialStateProperty.all<Color>(Colors.red),
-                                ),
-                                child: const Text("Delete"),
-                              ),
-                            ],
-                          );
-                        },
-                      );
+                      _submitForm();
                     },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
-                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                    ),
-                    child: const Text('Delete'),
-                  )
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  _submitForm();
-
-                },
-                child: const Text('Save Record'),
+                    child: const Text('Save Record'),
+                  ))
+                ],
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class DeleteBtn extends StatelessWidget {
+  final String deleteMsg;
+  final Function onPressedFn;
+
+  const DeleteBtn(this.deleteMsg, this.onPressedFn, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Delete Password?"),
+              content: Text(deleteMsg),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Close"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    onPressedFn();
+                  },
+                  style: ButtonStyle(
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.red),
+                  ),
+                  child: const Text("Delete"),
+                ),
+              ],
+            );
+          },
+        );
+      },
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+      ),
+      child: const Text('Delete'),
     );
   }
 }

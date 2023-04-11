@@ -40,75 +40,74 @@ class _ViewScreenState extends State<ViewScreen> {
       appBar: AppBar(
         title: Text(passwordRecord!.name),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ListTile(
-              subtitle: const Text("Website Name"),
-              title: Text(passwordRecord!.name),
+      body:
+          // Padding(
+          //   padding: const EdgeInsets.all(0),
+          //   child:
+          ListView(
+        // crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ListTile(
+            subtitle: const Text("Website Name"),
+            title: Text(passwordRecord!.name),
+          ),
+          ListTile(
+            subtitle: const Text("Username"),
+            title: Text(passwordRecord!.userName),
+            trailing: IconButton(
+              icon: const Icon(Icons.copy),
+              onPressed: () async {
+                await Clipboard.setData(
+                    ClipboardData(text: passwordRecord!.userName));
+              },
             ),
-            ListTile(
-              subtitle: const Text("Username"),
-              title: Text(passwordRecord!.userName),
-              trailing: IconButton(
-                icon: const Icon(Icons.copy ),
-                onPressed: () async {
-                  await Clipboard.setData(ClipboardData(text: passwordRecord!.userName));
-                },
-              ),
-            ),
-            ListTile(
-              subtitle: const Text("Password"),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      _showPassword ? Icons.visibility : Icons.visibility_off,
-                      color: Colors.grey,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _showPassword = !_showPassword;
-                      });
-                    },
+          ),
+          ListTile(
+            subtitle: const Text("Password"),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    _showPassword ? Icons.visibility : Icons.visibility_off,
+                    color: Colors.grey,
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.copy ),
-                    onPressed: () async {
-                      await Clipboard.setData(ClipboardData(text: passwordRecord!.password));
-                    },
-                  ),
-                ],
-              ),
-              title: _showPassword
-                  ? Text(passwordRecord!.password)
-                  : const Text("********"),
-            ),
-            Padding(
-                padding: const EdgeInsets.all(16),
-              child: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditScreen(passwordRecord: passwordRecord),
-                      ),
-                    );
+                    setState(() {
+                      _showPassword = !_showPassword;
+                    });
                   },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Text('Edit')
-                    ],
-                  )
-              ),
-            )
-          ],
-        ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.copy),
+                  onPressed: () async {
+                    await Clipboard.setData(
+                        ClipboardData(text: passwordRecord!.password));
+                  },
+                ),
+              ],
+            ),
+            title: _showPassword
+                ? Text(passwordRecord!.password)
+                : const Text("********"),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          EditScreen(passwordRecord: passwordRecord),
+                    ),
+                  );
+                },
+                child: Text('Edit')),
+          )
+        ],
       ),
+      // ),
     );
   }
 }

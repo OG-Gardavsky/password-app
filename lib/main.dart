@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
           initialRoute: Routes.home,
           routes: Routes.routesMap,
           theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
           )),
     );
   }
