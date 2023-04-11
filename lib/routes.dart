@@ -12,9 +12,9 @@ class Routes {
 
 
   static final Map<String, WidgetBuilder> routesMap = {
-    home: (BuildContext context) => HomeScreen(),
-    edit: (BuildContext context) => EditScreen(),
-    view: (BuildContext context) => ViewScreen(),
+    home: (BuildContext context) => const HomeScreen(),
+    edit: (BuildContext context) => const EditScreen(),
+    view: (BuildContext context) => const ViewScreen(),
     secure: (BuildContext context) => SecureDataScreen(),
   };
 }

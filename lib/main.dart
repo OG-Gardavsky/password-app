@@ -7,9 +7,9 @@ import 'package:provider/provider.dart';
 
 import 'models/password_record.dart';
 
-final storage = FlutterSecureStorage();
+const storage = FlutterSecureStorage();
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -68,8 +68,18 @@ class MyAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  PasswordRecord? findRecordById(String id) {
-    return passwordRecords.firstWhere((element) => element.id == id);
+  bool isRecordValid(PasswordRecord record) {
+      return passwordRecords.contains(record);
+  }
+
+  Future<void> deleteRecordById(String id) async {
+    await storage.delete(key: id);
+
+    passwordRecords.removeWhere((element) => element.id == id);
+
+    notifyListeners();
+
+    // await loadPassRecordsFromDb();
   }
 
 }

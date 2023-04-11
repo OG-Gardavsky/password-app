@@ -11,31 +11,37 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
-    var passwordRecords = appState.passwordRecords;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Passwords '),
+        title: const Text('Passwords'),
       ),
       body: Center(
-        child: ListView.builder(
-          itemCount: passwordRecords.length,
-          itemBuilder: (BuildContext context, int index) {
-            return ListTile(
-              title: Text(passwordRecords[index].name),
-              subtitle: Text(passwordRecords[index].userName),
-              trailing: Icon(Icons.lock),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ViewScreen( passwordRecordId: passwordRecords[index].id),
-                  ),
-                );
-              },
-            );
-          },
-        ),
+        child:
+        ListView(
+          children: appState.passwordRecords.length > 0 ?
+            appState.passwordRecords.map((record) =>
+                ListTile(
+                  title: Text(record.name),
+                  subtitle: Text(record.userName),
+                  trailing: const Icon(Icons.lock),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ViewScreen( passwordRecord: record),
+                      ),
+                    );
+                  },
+                )
+            ).toList()
+          : [
+            ListTile(
+              title: Text('No records saved, add some'),
+              subtitle: Text(''),
+            ),
+          ]
+        )
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

@@ -6,9 +6,9 @@ import '../main.dart';
 import '../models/password_record.dart';
 
 class ViewScreen extends StatefulWidget {
-  final String? passwordRecordId;
+  final PasswordRecord? passwordRecord;
 
-  const ViewScreen({super.key, this.passwordRecordId});
+  const ViewScreen({super.key, this.passwordRecord});
 
   @override
   _ViewScreenState createState() => _ViewScreenState();
@@ -21,9 +21,9 @@ class _ViewScreenState extends State<ViewScreen> {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
-    passwordRecord = widget.passwordRecordId != null ? appState.findRecordById(widget.passwordRecordId!) : null;
+    passwordRecord = widget.passwordRecord;
 
-    if (passwordRecord == null) {
+    if (passwordRecord == null || !appState.isRecordValid(passwordRecord!)) {
       return Scaffold(
         appBar: AppBar(
           title: Text("View Password Record"),

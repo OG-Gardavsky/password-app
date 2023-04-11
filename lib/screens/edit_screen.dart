@@ -16,13 +16,14 @@ class EditScreen extends StatefulWidget {
 
 class _EditScreenState extends State<EditScreen> {
   final _formKey = GlobalKey<FormState>();
+  late MyAppState appState;
 
   String _name = '';
   String _userName = '';
   String _password = '';
   String? _id = '';
 
-  void _submitForm(MyAppState appState) async {
+  void _submitForm() async {
 
     if (_formKey.currentState!.validate()) {
       await appState.saveOrUpdatePassRecord(PasswordRecord(
@@ -39,9 +40,20 @@ class _EditScreenState extends State<EditScreen> {
     }
   }
 
+  void _deleteRecord() async {
+
+    await appState.deleteRecordById(_id!);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Record deleted!')),
+    );
+
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
+     appState = context.watch<MyAppState>();
 
     _name = widget.passwordRecord?.name ?? '';
     _userName = widget.passwordRecord?.userName ?? '';
@@ -92,14 +104,14 @@ class _EditScreenState extends State<EditScreen> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  _submitForm(appState);
+                  _submitForm();
 
                 },
                 child: const Text('Save Record'),
               ),
               ElevatedButton(
                 onPressed: () {
-                  _submitForm(appState);
+                  _deleteRecord();
                 },
                 child: const Text('Delete'),
               ),
