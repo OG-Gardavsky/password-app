@@ -26,9 +26,9 @@ class _ViewScreenState extends State<ViewScreen> {
     if (passwordRecord == null || !appState.isRecordValid(passwordRecord!)) {
       return Scaffold(
         appBar: AppBar(
-          title: Text("View Password Record"),
+          title: const Text("View Password Record"),
         ),
-        body: Center(
+        body: const Center(
           child: Text("No password record found."),
         ),
       );
@@ -46,21 +46,21 @@ class _ViewScreenState extends State<ViewScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ListTile(
-              subtitle: Text("Website Name"),
+              subtitle: const Text("Website Name"),
               title: Text(passwordRecord!.name),
             ),
             ListTile(
-              subtitle: Text("Username"),
+              subtitle: const Text("Username"),
               title: Text(passwordRecord!.userName),
               trailing: IconButton(
-                icon: Icon(Icons.copy ),
+                icon: const Icon(Icons.copy ),
                 onPressed: () async {
                   await Clipboard.setData(ClipboardData(text: passwordRecord!.userName));
                 },
               ),
             ),
             ListTile(
-              subtitle: Text("Password"),
+              subtitle: const Text("Password"),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -76,7 +76,7 @@ class _ViewScreenState extends State<ViewScreen> {
                     },
                   ),
                   IconButton(
-                    icon: Icon(Icons.copy ),
+                    icon: const Icon(Icons.copy ),
                     onPressed: () async {
                       await Clipboard.setData(ClipboardData(text: passwordRecord!.password));
                     },
@@ -85,7 +85,7 @@ class _ViewScreenState extends State<ViewScreen> {
               ),
               title: _showPassword
                   ? Text(passwordRecord!.password)
-                  : Text("********"),
+                  : const Text("********"),
             ),
             Padding(
                 padding: const EdgeInsets.all(16),

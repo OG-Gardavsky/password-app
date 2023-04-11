@@ -34,7 +34,7 @@ class _EditScreenState extends State<EditScreen> {
       ));
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Record saved')),
+        const SnackBar(content: Text('Record saved')),
       );
       Navigator.of(context).pop();
     }
@@ -44,12 +44,10 @@ class _EditScreenState extends State<EditScreen> {
     await appState.deleteRecordById(_id!);
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Record deleted!')),
+      const SnackBar(content: Text('Record deleted!')),
     );
 
-    Navigator.of(context).pop();
-    Navigator.of(context).pop();
-    Navigator.of(context).pop();
+    Navigator.of(context).popUntil(ModalRoute.withName('/'));
   }
 
   @override

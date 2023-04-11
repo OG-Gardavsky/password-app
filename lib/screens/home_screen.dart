@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
       body: Center(
         child:
         ListView(
-          children: appState.passwordRecords.length > 0 ?
+          children: appState.passwordRecords.isNotEmpty ?
             appState.passwordRecords.map((record) =>
                 ListTile(
                   title: Text(record.name),
@@ -36,7 +36,7 @@ class HomeScreen extends StatelessWidget {
                 )
             ).toList()
           : [
-            ListTile(
+            const ListTile(
               title: Text('No records saved, add some'),
               subtitle: Text(''),
             ),
@@ -48,7 +48,7 @@ class HomeScreen extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => EditScreen(),
+              builder: (context) => const EditScreen(),
             ),
           );
         },
